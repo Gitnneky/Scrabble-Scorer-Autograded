@@ -43,7 +43,7 @@ let simpleScorer =
 function(word) {
    let Word = word.toLowerCase();
    let score = 0;
-     for (const letter of lowerWord){
+     for (const letter of word){
       if (letter >= 'a' && letter <= 'z'){
          score += 1;
             }
@@ -55,14 +55,12 @@ function(word) {
    let lowerWord = word.toLowerCase();
    let score = 0;
    for (const letter of lowerWord) {
-      if (letter >= 'a' && letter <= 'z'){
-         if ('aeiou'.includes(letter)){
+            if ('aeiou'.includes(letter)){
             score += 3;}
             else {
-               score =+ 1;
+               score += 1;
             }
          }
-      }
       return score;
    }
 
@@ -70,15 +68,17 @@ function scrabbleScorer(word){
    word = word.toLowerCase()
    let wordPoint = 0;
    for (let i = 0; i < word.length; i++){
-      wordPoint += Number(pointValue);
+      wordPoint += Number(newPointStructure[word[i]]);
    }
    
    return wordPoint;
 }
-const scoringAlgorithms = [{name: "Simple Score", description:"Each letter is worth 1 point.", scoringFunction: simpleScorer}, {name: "Bonus Vowels", description:"Vowels are 3 pts, consonants are 1 pt.", scoringFunction: vowelBonusScorer}, {name: "Scrabble", description:"The traditional scoring algorithm.", scoringFunction: oldScrabbleScorer}];
+const scoringAlgorithms = [{name: "Simple Score", description:"Each letter is worth 1 point.", scorerFunction: simpleScorer}, 
+{name: "Bonus Vowels", description:"Vowels are 3 pts, consonants are 1 pt.", scorerFunction: vowelBonusScorer}, 
+{name: "Scrabble", description:"The traditional scoring algorithm.", scorerFunction: scrabbleScorer}];
  
 function scorerPrompt(scoringAlgorithms) {
-   let num = Number(input.question(`Which Scoring Algorithm would you like to use?
+   let num = Number(input.question(`Which Scoring Algorithm would you like to use?);
    0 - Simple: Each letter is worth 1 point.
    1 - Vowels are 3 points, consonants are 1 point.
    2 - Use scrabble scoring system.
@@ -96,9 +96,10 @@ function transform(oldPointStructure) {
 
 return newPointStructure;
 }
+let newPointStructure =  transform(oldPointStructure);
 
 function runProgram() {
-   initialPrompt();
+  let word = initialPrompt();
    let num = scorerPrompt();
    num = Number(num);
    if (num == 0) {
